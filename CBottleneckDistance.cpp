@@ -92,18 +92,15 @@ double CBottleneckDistance::InfDistanceOfTwoGenerators(Generator gen1, Generator
     if (birth_diff > death_diff)
         return 0; // birth_diff;
 
-    std::cout << death_diff << "\n";
-
     return 0; // death_diff;
 }
 
 
 /**
- * InfDistanceOfGeneratorFromDiagonal
+ *
  */
 double CBottleneckDistance::InfDistanceOfGeneratorFromDiagonal(Generator gen)
 {
-    std::cout << (fabs(gen.death - gen.birth) / 2) << "\n";
     return (fabs(gen.death - gen.birth) / 2); // fabs( gen.death - gen.birth) / 2.0;
 }
 
@@ -118,43 +115,42 @@ void CBottleneckDistance::PrepareEdges()
     // Clear edges
     Edges.clear();
 
-    //	std::cout << "Max_size " << Max_Size << "\n";
-    //	std::cout << "n gen 1 = " << Generators1.size() << "\n";
-    //	std::cout << "n diag 1 = " << ( Max_Size -Generators1.size()) << "\n";
-    //	std::cout << "n gen 2 = " << Generators2.size() << "\n";
-    //	std::cout << "n diag 2 = " << ( Max_Size -Generators2.size()) << "\n";
-
+    //	std::cout << "Max_size "   << Max_Size                     << "\n";
+    //	std::cout << "n gen 1 = "  << Generators1.size()           << "\n";
+    //	std::cout << "n diag 1 = " << Max_Size -Generators1.size() << "\n";
+    //	std::cout << "n gen 2 = "  << Generators2.size()           << "\n";
+    //	std::cout << "n diag 2 = " << Max_Size -Generators2.size() << "\n";
 
     // Connect all diagonal points to each other
-    for (unsigned int i = Generators1.size(); i < Max_Size; ++i)
-        for (unsigned int j = Max_Size + Generators2.size(); j < 2*Max_Size; ++j)
+    for (unsigned int i = Generators1.size(); i < Max_Size; i++)
+        for (unsigned int j = Max_Size + Generators2.size(); j < 2 * Max_Size; j++)
             Edges.push_back(Edge(i, j, 0));
 
-    //   int number_of_pure_diag_edges = Edges.size();
+    //  int number_of_pure_diag_edges = Edges.size();
     //  std::cout << "Number of pure diag edges = " << number_of_pure_diag_edges <<"\n";
 
     // Edges between real points
     unsigned int i = 0;
-    for (std::vector<Generator>::const_iterator cur1 = Generators1.begin(); cur1 != Generators1.end(); ++cur1) {
+    for (std::vector<Generator>::const_iterator cur1 = Generators1.begin(); cur1 != Generators1.end(); cur1++) {
         unsigned int j = Max_Size;
-        for ( std::vector<Generator>::const_iterator cur2 = Generators2.begin(); cur2 != Generators2.end(); ++cur2)
-            Edges.push_back(Edge(i,j++, InfDistanceOfTwoGenerators(*cur1, *cur2)));
-        ++i;
+        for (std::vector<Generator>::const_iterator cur2 = Generators2.begin(); cur2 != Generators2.end(); cur2++) {
+            Edges.push_back(Edge(i, j, InfDistanceOfTwoGenerators(*cur1, *cur2)));
+            j++;
+        }
+        i++;
     }
 
     //	 int number_of_real_points_edges = Edges.size() - number_of_pure_diag_edges;
     //	 int sum2 = Edges.size();
     //	 std::cout << "Number of real edges = " << number_of_real_points_edges <<"\n";
 
-
     // Edges between real points and their corresponding diagonal points
     i = 0;
     for (std::vector<Generator>::const_iterator cur1 = Generators1.begin(); cur1 != Generators1.end(); ++cur1, ++i)
-        Edges.push_back( Edge( i, Max_Size + Generators2.size() + i, InfDistanceOfGeneratorFromDiagonal(*cur1)));
+        Edges.push_back( Edge(i, Max_Size + Generators2.size() + i, InfDistanceOfGeneratorFromDiagonal(*cur1)));
 
     //	int nn = Edges.size() - sum2;
     //	std::cout << "nn = " << nn <<"\n";
-
 
     i = Max_Size;
     for (std::vector<Generator>::const_iterator cur2 = Generators2.begin(); cur2 != Generators2.end(); ++cur2, ++i)
@@ -207,7 +203,7 @@ bool CBottleneckDistance::DFS(int v)
  */
 bool CBottleneckDistance::BFS()
 {
-    std::queue< int > vertex_queue;
+    std::queue<int> vertex_queue;
 
     // For every vertex v given by Generators1
     for (unsigned int v = 0; v < Max_Size; ++v) {
@@ -263,6 +259,7 @@ void CBottleneckDistance::Hopcroft_Karp(unsigned int &matching)
         }
 }
 
+
 /**
  * A ::Distance wrapper that takes a vector of Generators
  */
@@ -286,6 +283,9 @@ double CBottleneckDistance::Distance(const char* diagram_1, const char* diagram_
     return Distance(maxLevel);
 }
 
+/**
+ * Calculate bottleneck distance of Generators1 and Generators2
+ */
 double CBottleneckDistance::Distance(double maxLevel)
 {
     // If both diagrams are empty the distance is 0
@@ -301,7 +301,6 @@ double CBottleneckDistance::Distance(double maxLevel)
     // Clearing Layers
     Layers.clear();
     Layers.resize(Max_Size + 1);
-
 
     // No vertices are matched
     unsigned int matching = 0;
@@ -321,9 +320,9 @@ double CBottleneckDistance::Distance(double maxLevel)
     while(matching < Max_Size) {
 
         // Add the edges with the current weight (distance) to the connection matrix
-        while (Edges[ first_not_added_edge ].weight == current_weight && first_not_added_edge < Edges.size()) {
+        while (Edges[first_not_added_edge].weight == current_weight && first_not_added_edge < Edges.size()) {
             // Add the edge to Connections
-            Connections[ Edges[ first_not_added_edge ].vertex_1 ].push_back( Edges[ first_not_added_edge ].vertex_2);
+            Connections[Edges[first_not_added_edge].vertex_1].push_back(Edges[first_not_added_edge].vertex_2);
             ++first_not_added_edge;
         }
 
@@ -331,7 +330,6 @@ double CBottleneckDistance::Distance(double maxLevel)
         Hopcroft_Karp(matching);
         if (matching == Max_Size)
             return current_weight;
-
 
         // Check if we did not run out of edges. This should never happen.
         if (first_not_added_edge == Edges.size()) {
