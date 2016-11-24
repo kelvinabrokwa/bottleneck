@@ -12,7 +12,8 @@ std::vector<Generator> loadGenerators(double* A, int m, int n, double maxLevel);
 
 
 void mexFunction(int nlhs, mxArray *plhs[],
-                 int nrhs, const mxArray *prhs[]) {
+                 int nrhs, const mxArray *prhs[])
+{
     double *A, *B;
     int mA, nA, mB, nB;
 

@@ -29,7 +29,8 @@ CBottleneckDistance::~CBottleneckDistance() {}
  *
  */
 void CBottleneckDistance::LoadGeneratorsFromFile(
-        const char* fileName, std::vector<Generator> &generators, double maxLevel) {
+        const char* fileName, std::vector<Generator> &generators, double maxLevel)
+{
 
     Generator gen;
 
@@ -134,7 +135,7 @@ void CBottleneckDistance::PrepareEdges()
 
     // Edges between real points
     unsigned int i = 0;
-    for ( std::vector<Generator>::const_iterator cur1 = Generators1.begin(); cur1 != Generators1.end(); ++cur1) {
+    for (std::vector<Generator>::const_iterator cur1 = Generators1.begin(); cur1 != Generators1.end(); ++cur1) {
         unsigned int j = Max_Size;
         for ( std::vector<Generator>::const_iterator cur2 = Generators2.begin(); cur2 != Generators2.end(); ++cur2)
             Edges.push_back(Edge(i,j++, InfDistanceOfTwoGenerators(*cur1, *cur2)));
@@ -209,7 +210,7 @@ bool CBottleneckDistance::BFS()
     std::queue< int > vertex_queue;
 
     // For every vertex v given by Generators1
-    for(unsigned int v = 0; v < Max_Size; ++v) {
+    for (unsigned int v = 0; v < Max_Size; ++v) {
         // If its not paired to vertex in Generators2
         if (Pair[ v ] < 0) {
             // Set its layer to 0 and put it in the queue

@@ -1,4 +1,9 @@
+CC=g++
+INC=/Applications/MATLAB_R2016b.app/extern/include
+CFLAGS=-Wall -O3 -I$(INC)
+EXECUTABLES=bottleneck bottleneckC
+
 all:
-	g++ -O3 bottleneckDist.cpp -o bottleneck
+	$(CC) $(CFLAGS) bottleneckDist.cpp -o bottleneck
 clean:
-	rm a.out bottleneck
+	rm -rf $(EXECUTABLES)

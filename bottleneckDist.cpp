@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <fstream>
-#include "CBottleneckDistance.hpp"
+#include "CBottleneckDistance.cpp"
 
 using namespace std;
 
