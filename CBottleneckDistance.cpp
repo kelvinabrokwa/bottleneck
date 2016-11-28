@@ -14,6 +14,15 @@
 #include <algorithm>
 
 
+/**
+ * Debugging methods
+ */
+void printGenerators(std::vector<Generator> generators)
+{
+    for (auto gen : generators)
+        std::cout << gen.birth << " - " << gen.death << std::endl;
+}
+
 CBottleneckDistance::CBottleneckDistance()
 {
     NeglectShortGenerators = false;
@@ -101,7 +110,7 @@ double CBottleneckDistance::InfDistanceOfTwoGenerators(Generator gen1, Generator
  */
 double CBottleneckDistance::InfDistanceOfGeneratorFromDiagonal(Generator gen)
 {
-    return (fabs(gen.death - gen.birth) / 2); // fabs( gen.death - gen.birth) / 2.0;
+    return fabs(gen.death - gen.birth) / 2; // fabs( gen.death - gen.birth) / 2.0;
 }
 
 /**
@@ -115,11 +124,11 @@ void CBottleneckDistance::PrepareEdges()
     // Clear edges
     Edges.clear();
 
-    //	std::cout << "Max_size "   << Max_Size                     << "\n";
-    //	std::cout << "n gen 1 = "  << Generators1.size()           << "\n";
-    //	std::cout << "n diag 1 = " << Max_Size -Generators1.size() << "\n";
-    //	std::cout << "n gen 2 = "  << Generators2.size()           << "\n";
-    //	std::cout << "n diag 2 = " << Max_Size -Generators2.size() << "\n";
+    //	std::cout << "Max_size = " << Max_Size                      << "\n";
+    //	std::cout << "n gen 1  = " << Generators1.size()            << "\n";
+    //	std::cout << "n diag 1 = " << Max_Size - Generators1.size() << "\n";
+    //	std::cout << "n gen 2  = " << Generators2.size()            << "\n";
+    //	std::cout << "n diag 2 = " << Max_Size -Generators2.size()  << "\n";
 
     // Connect all diagonal points to each other
     for (unsigned int i = Generators1.size(); i < Max_Size; i++)
@@ -181,46 +190,46 @@ bool CBottleneckDistance::DFS(int v)
         return true;
 
     // for every adjacent vertex u of v
-    for (unsigned int i = 0; i < Connections[ v ].size(); ++i) {
-        int u = Connections[ v ][ i ];
-        if (Layers[ Pair[ u ] + 1 ] == Layers[ v + 1 ] + 1) {
-            if (DFS( Pair[ u ])) {
-                Pair[ u ] = v;
-                Pair[ v ] = u;
+    for (unsigned int i = 0; i < Connections[v].size(); ++i) {
+        int u = Connections[v][i];
+        if (Layers[Pair[u] + 1] == Layers[v + 1] + 1) {
+            if (DFS( Pair[u])) {
+                Pair[u] = v;
+                Pair[v] = u;
                 return true;
             }
         }
     }
 
-    Layers[ v + 1 ] = -1;
+    Layers[v + 1] = -1;
 
     return false;
 }
 
 
 /**
- * Breath first search used by Hopf-Karp algorithm
+ * Breath first search used by Hopcroft-Karp algorithm
  */
 bool CBottleneckDistance::BFS()
 {
     std::queue<int> vertex_queue;
 
     // For every vertex v given by Generators1
-    for (unsigned int v = 0; v < Max_Size; ++v) {
+    for (unsigned int v = 0; v < Max_Size; v++) {
         // If its not paired to vertex in Generators2
-        if (Pair[ v ] < 0) {
+        if (Pair[v] < 0) {
             // Set its layer to 0 and put it in the queue
-            Layers[ v + 1 ] = 0;
+            Layers[v + 1] = 0;
             vertex_queue.push(v);
         }
         else {
             // Otherwise mark it as matched (set Layer to NILL)
-            Layers[ v + 1 ] = -1;
+            Layers[v + 1] = -1;
         }
     }
 
     // Set layer for NIL
-    Layers[ 0 ] = -1;
+    Layers[0] = -1;
 
     // Search the vertices in the queue
     while (!vertex_queue.empty()) {
@@ -240,7 +249,8 @@ bool CBottleneckDistance::BFS()
             }
         }
     }
-    return (Layers[ 0 ] != -1);
+
+    return Layers[0] != -1;
 }
 
 
@@ -296,7 +306,7 @@ double CBottleneckDistance::Distance(double maxLevel)
 
     // Clear the pairing
     Pair.clear();
-    Pair.assign(2*Max_Size, -1);
+    Pair.assign(2 * Max_Size, -1);
 
     // Clearing Layers
     Layers.clear();

@@ -1,10 +1,6 @@
-//============================================================================
-// Name        : BottleneckDistanceDouble.cpp
-// Author      :
-// Version     :
-// Copyright   : Your copyright notice
-// Description : Hello World in C++, Ansi-style
-//============================================================================
+/**
+ * BottleneckDistanceDouble.cpp
+ */
 
 #include <iostream>
 #include <fstream>
@@ -21,7 +17,6 @@ int main() {
     int B = 1;
 
     double max_gen = 1;
-
 
     //  double skip_last = 1;
     //  double skip_short = 0;

@@ -69,12 +69,5 @@ std::vector<Generator> loadGenerators(double* A, int m, int n, double maxLevel)
 }
 
 
-/**
- *
- */
-void printGenerators(std::vector<Generator> generators)
-{
-    for (auto gen : generators)
-        std::cout << gen.birth << " - " << gen.death << std::endl;
-}
+
 

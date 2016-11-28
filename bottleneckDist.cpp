@@ -33,9 +33,6 @@ int main(int argc, char* argv[])
 
     CBottleneckDistance d;
 
-    int n_files = 2;
-    // int B = 1;
-
     double max_gen = 1;
 
     // compute the distance between persistence diagrams

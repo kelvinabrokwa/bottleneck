@@ -44,36 +44,54 @@ class CBottleneckDistance {
         double  NeglectSize;
         double  NeglectBornAfter;
 
-        /* Generators for two persistence diagrams which are going to be compared */
+        /**
+         * Generators for two persistence diagrams which are
+         * going to be compared
+         */
         std::vector<Generator> Generators1;
         std::vector<Generator> Generators2;
 
-        /* Number of generators in Generator1 and Generator2 */
+        /**
+         * Number of generators in Generator1 and Generator2
+         * Total number of generators
+         */
         unsigned int Max_Size;
 
-        /* Edges between all the nodes given by generators of the persistence diagrams */
+        /**
+         * Edges between all the nodes given by
+         * generators of the persistence diagrams
+         */
         std::vector<Edge> Edges;
 
         /**
-         * Pairing between the vertices in the persistence diagrams
-         * -1 means the vertex is not paired to any other vertex it is pair to special vertex NIL
-         * non negative number is the index of the vertex to which the given vertex is paired
+         * Pairing between the vertices in the persistence
+         * diagrams -1 means the vertex is not paired to any
+         * other vertex it is pair to special vertex NIL
+         * non negative number is the index of the vertex to
+         * which the given vertex is paired
          */
         std::vector<int> Pair;
 
-        /* Connection matrix gives the edges between the vertexes in the first diagram and the second */
+        /**
+         * Connection matrix gives the edges between the
+         * vertexes in the first diagram and the second
+         */
         std::vector< std::vector<int> > Connections;
 
         /**
-         * Layers used in Hopcroft-Karp algorithm
-         * the layer information is required for a NIL (special) vertex and all vertices in Generators1
-         * Hence 0 slot is used for NIL and all the vertices in Generators1 are shifted by one. So to
-         * read layer of the vertex 0 we access the Layers[1]
+         * Layers used in Hopcroft-Karp algorithm the layer
+         * information is required for a NIL (special) vertex
+         * and all vertices in Generators1 Hence 0 slot is used
+         * for NIL and all the vertices in Generators1 are
+         * shifted by one. So to read layer of the vertex 0 we
+         * access the Layers[1]
          */
         std::vector<int> Layers;
 
         /* Loads generators from the file */
-        void LoadGeneratorsFromFile(const char* fileName, std::vector<Generator> &generators, double maxLevel);
+        void LoadGeneratorsFromFile(const char* fileName,
+                                    std::vector<Generator> &generators,
+                                    double maxLevel);
 
         /* Computes distance between two generators */
         double  InfDistanceOfTwoGenerators(Generator gen1, Generator gen2);
@@ -95,16 +113,30 @@ class CBottleneckDistance {
         /* Breath first search used by Hopf-Karp algorithm */
         bool BFS();
 
-        /* Hopf-Karp algorithm to find maximal matching*/
+        /* Hopf-Karp algorithm to find maximal matching */
         void Hopcroft_Karp(unsigned int &matching);
 
     public:
         CBottleneckDistance();
         virtual ~CBottleneckDistance();
 
+        /**
+         *
+         */
         double Distance(double maxLevel);
-        double Distance(std::vector<Generator> generator1, std::vector<Generator> generator2, double maxLevel);
-        double Distance(const char* diagram_1, const char* diagram_2, double maxLevel);
+
+        /**
+         *
+         */
+        double Distance(std::vector<Generator> generator1,
+                        std::vector<Generator> generator2,
+                        double maxLevel);
+        /**
+         *
+         */
+        double Distance(const char* diagram_1,
+                        const char* diagram_2,
+                        double maxLevel);
 
         /* Resets to default setings. It all generators are taken in account */
         void ResetSettings();
